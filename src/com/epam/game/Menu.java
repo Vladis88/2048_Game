@@ -4,38 +4,46 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
-public class Menu {
+public class Menu extends JPanel {
     public static final int WIDTH = 550;
     public static final int HEIGHT = 850;
+    public static final Font main = new Font("Bebas Neue Regular", Font.BOLD, 30);
     private JFrame window;
     private JButton buttonPlay;
     private JButton buttonExit;
+    private GamePanel game;
+    private BufferedImage image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 
     public Menu() {
-        window = new JFrame("MENU");
+        this.window = new JFrame();
         ImageIcon icon = new ImageIcon("res/backMenu2.png");
-        window.setIconImage(icon.getImage());
+        this.window.setIconImage(icon.getImage());
         buttonPlay = new JButton();
         buttonExit = new JButton();
-        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        window.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        window.pack();
-        window.setResizable(false);
-        window.setLocationRelativeTo(null);
+        this.window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.window.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.window.pack();
+        this.window.setResizable(false);
+        this.window.setLocationRelativeTo(null);
         drawMenu();
-        window.setVisible(true);
+        this.window.setVisible(true);
 
         buttonCall();
     }
 
     public void newWindow() {
         ImageIcon icon = new ImageIcon("res/2048_ico.png");
-        JFrame newWindow = new JFrame("2048");
-        GamePanel game = new GamePanel(newWindow);
+        JFrame newWindow = new JFrame();
+        game = new GamePanel(newWindow);
         newWindow.setIconImage(icon.getImage());
         newWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         newWindow.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -69,7 +77,7 @@ public class Menu {
     public void drawMenu() {
         ImageIcon mainImage = new ImageIcon("res/2048_ico_Main2.png");
         JLabel label = new JLabel(mainImage);
-        label.setBounds(70,50,400,383);
+        label.setBounds(70, 50, 400, 383);
         window.add(label);
 
         buttonPlay.setBounds(50, 500, 450, 88);

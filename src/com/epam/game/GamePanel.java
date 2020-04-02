@@ -1,15 +1,19 @@
 package com.epam.game;
 
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class GamePanel extends JPanel {
     //Field
@@ -17,29 +21,31 @@ public class GamePanel extends JPanel {
     public static final int COLS = 4;
     public static final int POSITION_X = 50;
     public static final int POSITION_Y = 325;
-    private static int SPACING = 8;
+    private static int SPACING = 10;
     public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * MyTile.WIDTH;     //440
     public static int BOARD_HEIGHT = (ROWS + 1) * SPACING + ROWS * MyTile.HEIGHT;  //440
+    private final int startTail = 2;
+    private BufferedImage gameBoard;
+    private BufferedImage finalBoard;
     private JButton buttonBackMenu;
     private JButton buttonBackOne;
     private JButton buttonAgain;
-    private boolean dead;
-    private boolean won;
-
-    private long lastTime;
-    private long delta;
-
-
-
     private JFrame window;
+    private ScoreBoard scoreBoard;
+    private MyTile[][] tileBoard;
 
     //Construction
     public GamePanel(JFrame window) {
+        tileBoard = new MyTile[ROWS][COLS];
+        this.scoreBoard = new ScoreBoard(0,0);//max value = 3932100
         this.window = window;
         this.buttonBackMenu = new JButton();
         this.buttonBackOne = new JButton();
         this.buttonAgain = new JButton();
+        gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
         drawButton();
+        start();
     }
 
     public void drawButton() {
@@ -100,18 +106,61 @@ public class GamePanel extends JPanel {
         });
     }
 
+    private void start() {
+        for (int i = 0; i < startTail; i++) {
+            createRandom();
+        }
+    }
+
+    private void createRandom() {
+        Random random = new Random();
+        boolean notValid = true;
+
+        while (notValid) {
+            int location = random.nextInt(ROWS * COLS);
+            int row = location / ROWS;
+            int col = location % COLS;
+            MyTile current = tileBoard[row][col];
+            if (current == null) {
+                int value = random.nextInt(10) < 9 ? 2 : 4; //С вероятностью 90% - 2, а 10% - 4
+                MyTile tile = new MyTile(value, getTileX(col), getTileY(row));
+                tileBoard[row][col] = tile;
+                notValid = false;
+            }
+        }
+    }
+
+    public int getTileX(int col) {
+        return POSITION_X + SPACING + SPACING * col + MyTile.WIDTH * col;
+    }
+
+    public int getTileY(int row) {
+        return POSITION_Y + SPACING + SPACING * row + MyTile.HEIGHT * row;
+    }
+
     @Override
-    public void paintComponent(Graphics board) {
+    protected void paintComponent(Graphics g) {
+        Graphics2D board = (Graphics2D) g;
+        scoreBoard.printComponent(board);
         //draw boarder
         board.setColor(new Color(0xB2CAC1));
         board.fillRect(POSITION_X, POSITION_Y, BOARD_WIDTH, BOARD_HEIGHT);
         board.setColor(new Color(0xDFEBE6));
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
-                int x = SPACING + SPACING * j + MyTile.WIDTH * j;
-                int y = SPACING + SPACING * i + MyTile.HEIGHT * i;
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                int x = SPACING + SPACING * col + MyTile.WIDTH * col;
+                int y = SPACING + SPACING * row + MyTile.HEIGHT * row;
                 board.fillRoundRect(x + POSITION_X, y + POSITION_Y, MyTile.WIDTH, MyTile.HEIGHT, MyTile.ARC_WIDTH, MyTile.ARC_HEIGHT);
             }
         }
+        //draw tiles
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                MyTile current = tileBoard[row][col];
+                if (current == null) continue;
+                current.render(board);
+            }
+        }
     }
+
 }
