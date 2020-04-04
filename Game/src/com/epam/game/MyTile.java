@@ -83,9 +83,9 @@ public class MyTile {
             font = Menu.main;
         }
         g.setFont(font);
-
-        int drawX = WIDTH / 2 - DrawCntTile.getWidth("" + value, font, g) / 2;
-        int drawY = HEIGHT / 2 + DrawCntTile.getHeight("" + value, font, g) / 2;
+        //высчитывание позиции ровно по центру плитки, исходя из размера цифры
+        int drawX = WIDTH / 2 - DrawCntTile.getWidth("" + value, font, g) / 2;//позиция на плитки X
+        int drawY = HEIGHT / 2 + DrawCntTile.getHeight("" + value, font, g) / 2;//позиция на плитки Y
 
         g.drawString("" + value, drawX, drawY);
         g.dispose();

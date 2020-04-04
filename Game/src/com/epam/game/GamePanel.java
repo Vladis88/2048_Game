@@ -6,13 +6,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
 public class GamePanel extends JPanel {
@@ -24,9 +23,7 @@ public class GamePanel extends JPanel {
     private static int SPACING = 10;
     public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * MyTile.WIDTH;     //440
     public static int BOARD_HEIGHT = (ROWS + 1) * SPACING + ROWS * MyTile.HEIGHT;  //440
-    private final int startTail = 2;
-    private BufferedImage gameBoard;
-    private BufferedImage finalBoard;
+    private static final int startTail = 2;
     private JButton buttonBackMenu;
     private JButton buttonBackOne;
     private JButton buttonAgain;
@@ -37,16 +34,15 @@ public class GamePanel extends JPanel {
     //Construction
     public GamePanel(JFrame window) {
         tileBoard = new MyTile[ROWS][COLS];
-        this.scoreBoard = new ScoreBoard(0,0);//max value = 3932100
+        this.scoreBoard = new ScoreBoard(0, 0);//max value = 3932100
         this.window = window;
         this.buttonBackMenu = new JButton();
         this.buttonBackOne = new JButton();
         this.buttonAgain = new JButton();
-        gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
         drawButton();
         start();
     }
+
 
     public void drawButton() {
         ImageIcon image2048 = new ImageIcon("res/2048_image.png");
@@ -138,14 +134,7 @@ public class GamePanel extends JPanel {
         return POSITION_Y + SPACING + SPACING * row + MyTile.HEIGHT * row;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D board = (Graphics2D) g;
-        scoreBoard.printComponent(board);
-        //draw boarder
-        board.setColor(new Color(0xB2CAC1));
-        board.fillRect(POSITION_X, POSITION_Y, BOARD_WIDTH, BOARD_HEIGHT);
-        board.setColor(new Color(0xDFEBE6));
+    public void drawBoard(Graphics2D board) {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 int x = SPACING + SPACING * col + MyTile.WIDTH * col;
@@ -153,6 +142,37 @@ public class GamePanel extends JPanel {
                 board.fillRoundRect(x + POSITION_X, y + POSITION_Y, MyTile.WIDTH, MyTile.HEIGHT, MyTile.ARC_WIDTH, MyTile.ARC_HEIGHT);
             }
         }
+    }
+
+    public void update(){
+        checkKey();
+
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                MyTile current = tileBoard[row][col];
+                if (current == null) continue;
+                current.update();
+                //reset position
+
+                //win
+            }
+        }
+
+    }
+
+    private void checkKey() {
+
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D board = (Graphics2D) g;
+        scoreBoard.drawScores(board);
+        //draw boarder
+        board.setColor(new Color(0xB2CAC1));
+        board.fillRect(POSITION_X, POSITION_Y, BOARD_WIDTH, BOARD_HEIGHT);
+        board.setColor(new Color(0xDFEBE6));
+        drawBoard(board);
         //draw tiles
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {

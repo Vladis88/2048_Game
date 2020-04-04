@@ -10,7 +10,7 @@ public class DrawCntTile {
 
     public static int getWidth(String str, Font f, Graphics2D g) {
         g.setFont(f);
-        Rectangle2D bounds = g.getFontMetrics().getStringBounds(str, g);
+        Rectangle2D bounds = g.getFontMetrics().getStringBounds(str, g);//получаем размер цифры, которая будет на плитке
         return (int) bounds.getWidth();
     }
     public static int getHeight(String str, Font f, Graphics2D g) {

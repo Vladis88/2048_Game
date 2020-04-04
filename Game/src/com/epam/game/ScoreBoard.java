@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-public class ScoreBoard extends JPanel {
+public class ScoreBoard {
     private static final int WIDTH = 90;
     private static final int WIDTH_NEXT = 145;
     private static final int HEIGHT = 70;
@@ -21,9 +21,7 @@ public class ScoreBoard extends JPanel {
         this.currentRes = currentRes;
         font = Menu.main.deriveFont(20f);
     }
-
-    @Override
-    protected void printComponent(Graphics g) {
+    protected void drawScores(Graphics g) {
         Graphics2D board = (Graphics2D) g;
         //currentScoreBoard
         board.setColor(new Color(0x45CC5F));

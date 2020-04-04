@@ -5,10 +5,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -20,8 +18,6 @@ public class Menu extends JPanel {
     private JFrame window;
     private JButton buttonPlay;
     private JButton buttonExit;
-    private GamePanel game;
-    private BufferedImage image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 
     public Menu() {
         this.window = new JFrame();
@@ -40,27 +36,13 @@ public class Menu extends JPanel {
         buttonCall();
     }
 
-    public void newWindow() {
-        ImageIcon icon = new ImageIcon("res/2048_ico.png");
-        JFrame newWindow = new JFrame();
-        game = new GamePanel(newWindow);
-        newWindow.setIconImage(icon.getImage());
-        newWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        newWindow.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        newWindow.add(game);
-        newWindow.pack();
-        newWindow.setResizable(false);
-        newWindow.setLocationRelativeTo(null);
-        newWindow.setVisible(true);
-    }
-
     public void buttonCall() {
         //button play
         buttonPlay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.dispose();
-                newWindow();
+                Game game = new Game();
             }
         });
 
