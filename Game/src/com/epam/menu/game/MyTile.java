@@ -1,20 +1,24 @@
-package com.epam.game;
+package com.epam.menu.game;
 
-import javax.swing.JPanel;
+import com.epam.menu.Menu;
+
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class MyTile {
-    //*
+    /**
+     * This class draws tiles.
+     */
+
     //Size, speed and form of tile
     public static final int WIDTH = 100;
     public static final int HEIGHT = 100;
     public static final int MOVE_SPEED = 20;
     public static final int ARC_WIDTH = 15;
     public static final int ARC_HEIGHT = 15;
-    //*
     //Color, digit and position
     private int value;
     private BufferedImage tileImg;
@@ -91,15 +95,28 @@ public class MyTile {
         g.dispose();
     }
 
-    public void update() {
 
-    }
-
-    public void render(Graphics2D g) {
+    public void render(Graphics g) {
         g.drawImage(tileImg, x, y, null);
     }
 
     public int getValue() {
         return value;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

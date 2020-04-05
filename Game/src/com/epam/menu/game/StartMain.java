@@ -1,4 +1,6 @@
-package com.epam.game;
+package com.epam.menu.game;
+
+import com.epam.menu.Menu;
 
 public class StartMain {
 
