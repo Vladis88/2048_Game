@@ -2,13 +2,14 @@ package com.epam.menu.game;
 
 import com.epam.menu.Menu;
 
+import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public class MyTile {
+public class MyTile extends JPanel{
     /**
      * This class draws tiles.
      */
@@ -36,6 +37,7 @@ public class MyTile {
         drawTail();
     }
 
+
     public void drawTail() {
         Graphics2D g = (Graphics2D) tileImg.getGraphics();
         if (value == 2) {
@@ -45,11 +47,11 @@ public class MyTile {
             background = new Color(0xF3FFF4);
             text = new Color(0x373737);
         } else if (value == 8) {
-            background = new Color(0xffffff);
-            text = new Color(0x373737);
+            background = new Color(0x26B748);
+            text = new Color(0xffffff);
         } else if (value == 16) {
-            background = new Color(0xffffff);
-            text = new Color(0x373737);
+            background = new Color(0x9AD228);
+            text = new Color(0xffffff);
         } else if (value == 32) {
             background = new Color(0xffffff);
             text = new Color(0x373737);
@@ -112,11 +114,19 @@ public class MyTile {
         return y;
     }
 
-    public void setX(int x) {
+    public MyTile setX(int x) {
         this.x = x;
+        return this;
     }
 
-    public void setY(int y) {
+    public MyTile setY(int y) {
         this.y = y;
+        return this;
+    }
+
+    public MyTile setValue(int value) {
+        this.value = value;
+        drawTail();
+        return this;
     }
 }

@@ -1,6 +1,6 @@
 package com.epam.menu.game;
 
-import com.epam.menu.game.Models.KeyEventResolvedModel;
+import com.epam.menu.game.service.Models.KeyEventResolvedModel;
 import com.epam.menu.game.service.KeyEventResolver;
 
 import javax.swing.JPanel;
@@ -45,19 +45,17 @@ public class GamePanel extends JPanel implements KeyListener {
 
     private void createRandom() {
         Random random = new Random();
-        boolean notValid = true;
-
-        while (notValid) {
-            int location = random.nextInt(ROWS * COLS);
-            int row = location / ROWS;
-            int col = location % COLS;
-            MyTile current = tileBoard[row][col];
-            if (current == null) {
-                int value = random.nextInt(10) < 9 ? 2 : 4; //С вероятностью 90% - 2, а 10% - 4
-                MyTile tile = new MyTile(value, getTileX(col), getTileY(row));
-                tileBoard[row][col] = tile;
-                notValid = false;
-            }
+        int location = random.nextInt(ROWS * COLS);
+        int row = location / ROWS;
+        int col = location % COLS;
+        if (tileBoard[row][col] != null) {
+            this.createRandom();
+        }
+        MyTile current = tileBoard[row][col];
+        if (current == null) {
+            int value = random.nextInt(10) < 9 ? 2 : 4; //С вероятностью 90% - 2, а 10% - 4
+            MyTile tile = new MyTile(value, getTileX(col), getTileY(row));
+            tileBoard[row][col] = tile;
         }
     }
 
@@ -71,8 +69,6 @@ public class GamePanel extends JPanel implements KeyListener {
 
     public void update() {
         this.repaint();
-
-
     }
 
     public void repositionTile(int event) {
@@ -84,11 +80,46 @@ public class GamePanel extends JPanel implements KeyListener {
                     KeyEventResolvedModel resolvedModel = resolver.resolve();
                     if (resolvedModel.isCondition()) break;
                     tileBoard[row][col] = null;
+                    if (tileBoard[resolvedModel.getRow()][resolvedModel.getCol()] != null) {
+                        MyTile existTile = tileBoard[resolvedModel.getRow()][resolvedModel.getCol()];
+                        if (existTile.getValue() == resolvedModel.getTile().getValue()) {
+                            existTile.setValue(existTile.getValue() + resolvedModel.getTile().getValue());
+                            resolvedModel.setTile(existTile);
+                        }
+//                        else if (existTile.getValue() != resolvedModel.getTile().getValue()) {
+//                            if (resolver.isHorizontal()) {
+//                                tileBoard[resolvedModel.getRow() + resolver.getDist()][resolvedModel.getCol()] = resolvedModel
+//                                        .getTile()
+//                                        .setX(getTileX(resolvedModel.getRow() + resolver.getDist()))
+//                                        .setY(getTileY(resolvedModel.getCol()));
+//                            }  else if (resolver.isVertical()) {
+//                                tileBoard[resolvedModel.getRow()][resolvedModel.getCol() + resolver.getDist()] = resolvedModel
+//                                        .getTile()
+//                                        .setX(getTileX(resolvedModel.getRow()))
+//                                        .setY(getTileY(resolvedModel.getCol() + resolver.getDist()));
+//                            }
+//                            update();
+//                            continue;
+//                        }
+                    }
                     tileBoard[resolvedModel.getRow()][resolvedModel.getCol()] = resolvedModel.getTile();
                     update();
                 }
             }
         }
+        this.createRandom();
+
+        /*for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                MyTile currentTile = tileBoard[row][col];
+                if (currentTile == null) {
+                    System.out.println("null");
+                    continue;
+                }
+                System.out.println("TILE");
+            }
+            System.out.println("\n");
+        }*/
 
     }
 

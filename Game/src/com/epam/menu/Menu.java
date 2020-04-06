@@ -43,7 +43,6 @@ public class Menu extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 window.dispose();
                 Game game = new Game();
-                game.start();
             }
         });
 

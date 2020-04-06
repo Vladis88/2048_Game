@@ -1,4 +1,4 @@
-package com.epam.menu.game.Models;
+package com.epam.menu.game.service.Models;
 
 import com.epam.menu.game.MyTile;
 

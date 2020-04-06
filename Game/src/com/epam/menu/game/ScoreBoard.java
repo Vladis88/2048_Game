@@ -5,6 +5,7 @@ import com.epam.menu.Menu;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class ScoreBoard extends JPanel {
@@ -12,11 +13,11 @@ public class ScoreBoard extends JPanel {
      * This class draws a panel with a current score and a panel with a record (maximum score)
      */
 
-    private static final int WIDTH = 90;
-    private static final int WIDTH_NEXT = 145;
-    private static final int HEIGHT = 70;
-    private static final int ARC_WIDTH = 15;
-    private static final int ARC_HEIGHT = 15;
+    public static final int WIDTH = 90;
+    public static final int WIDTH_NEXT = 145;
+    public static final int HEIGHT = 70;
+    public static final int ARC_WIDTH = 10;
+    public static final int ARC_HEIGHT = 10;
     private Font font;
     private int bestRes;
     private int currentRes;
@@ -25,12 +26,12 @@ public class ScoreBoard extends JPanel {
         this.bestRes = bestRes;
         this.currentRes = currentRes;
         font = Menu.main.deriveFont(20f);
-        drawScores();
+        //drawScores();
+        repaint();
     }
 
-
-    protected void drawScores() {
-        Graphics2D board = (Graphics2D) getGraphics();
+    @Override
+    protected void paintComponent(Graphics board) {
         //currentScoreBoard
         board.setColor(new Color(0x45CC5F));
         board.fillRoundRect(270, 40, WIDTH, HEIGHT, ARC_WIDTH, ARC_HEIGHT);
@@ -48,8 +49,7 @@ public class ScoreBoard extends JPanel {
         board.drawString("BEST", 425, 65);
         board.setColor(Color.BLACK);
         board.setFont(font);
-        board.drawString("" + bestRes, 383, 95);
-        board.dispose();
+        board.drawString("" + bestRes, 415, 95);
     }
 
 }

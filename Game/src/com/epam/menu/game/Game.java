@@ -11,7 +11,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Game implements Runnable {
+public class Game {
     /**
      * This class creates a game window and starts it.
      */
@@ -20,8 +20,7 @@ public class Game implements Runnable {
     private JButton buttonAgain;
     private JFrame window;
     public GamePanel game;
-    private boolean running;
-    private Thread gameThread;
+   // private ScoreBoard scoreBoard;
 
     public Game() {
         ImageIcon icon = new ImageIcon("res/2048_ico.png");
@@ -35,39 +34,30 @@ public class Game implements Runnable {
         window.setResizable(false);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        //this.scoreBoard = new ScoreBoard(0, 0);
         this.buttonBackMenu = new JButton();
         this.buttonBackOne = new JButton();
         this.buttonAgain = new JButton();
         drawButton();
+        update();
     }
 
     public void update() {
         game.update();
     }
 
-    @Override
-    public void run() {
-        update();
-    }
-
-    public synchronized void start() {
-        if(running) return;
-        running = true;
-        gameThread = new Thread(this,"game");
-        gameThread.start();
-    }
-
-    public synchronized void stop(){
-        if(!running) return;
-        running = false;
-        window.dispose();
-    }
 
     public void drawButton() {
         ImageIcon image2048 = new ImageIcon("res/2048_image.png");
         JLabel label = new JLabel(image2048);
         label.setBounds(10, 40, 220, 75);
         window.add(label);
+
+        //panel with a current score and a panel with a record
+       /* scoreBoard.setLocation(270, 40);
+        scoreBoard.setPreferredSize(new Dimension(ScoreBoard.WIDTH + ScoreBoard.WIDTH_NEXT, ScoreBoard.HEIGHT));
+        window.add(scoreBoard);
+        window.setVisible(true);*/
 
         //Button "back to menu"
         buttonBackMenu.setBounds(10, 195, 72, 72);
@@ -102,8 +92,7 @@ public class Game implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Back to menu");
-                stop();
-
+                window.dispose();
                 new Menu();
             }
         });
