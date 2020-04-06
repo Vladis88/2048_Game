@@ -4,9 +4,11 @@ import com.epam.menu.Menu;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.HeadlessException;
 
 public class ScoreBoard extends JPanel {
     /**
@@ -26,8 +28,8 @@ public class ScoreBoard extends JPanel {
         this.bestRes = bestRes;
         this.currentRes = currentRes;
         font = Menu.main.deriveFont(20f);
-        //drawScores();
-        repaint();
+        this.repaint();
+        setVisible(true);
     }
 
     @Override
@@ -50,6 +52,24 @@ public class ScoreBoard extends JPanel {
         board.setColor(Color.BLACK);
         board.setFont(font);
         board.drawString("" + bestRes, 415, 95);
+        board.dispose();
+    }
+
+
+    public int getBestRes() {
+        return bestRes;
+    }
+
+    public void setBestRes(int bestRes) {
+        this.bestRes = bestRes;
+    }
+
+    public int getCurrentRes() {
+        return currentRes;
+    }
+
+    public void setCurrentRes(int currentRes) {
+        this.currentRes = currentRes;
     }
 
 }

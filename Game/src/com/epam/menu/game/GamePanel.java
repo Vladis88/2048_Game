@@ -5,6 +5,7 @@ import com.epam.menu.game.service.KeyEventResolver;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -29,6 +30,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
     //Construction
     public GamePanel() {
+        setVisible(true);
         setFocusable(true);
         addKeyListener(this);
         boardImg = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -85,22 +87,22 @@ public class GamePanel extends JPanel implements KeyListener {
                         if (existTile.getValue() == resolvedModel.getTile().getValue()) {
                             existTile.setValue(existTile.getValue() + resolvedModel.getTile().getValue());
                             resolvedModel.setTile(existTile);
-                        }
-//                        else if (existTile.getValue() != resolvedModel.getTile().getValue()) {
-//                            if (resolver.isHorizontal()) {
-//                                tileBoard[resolvedModel.getRow() + resolver.getDist()][resolvedModel.getCol()] = resolvedModel
-//                                        .getTile()
-//                                        .setX(getTileX(resolvedModel.getRow() + resolver.getDist()))
-//                                        .setY(getTileY(resolvedModel.getCol()));
-//                            }  else if (resolver.isVertical()) {
-//                                tileBoard[resolvedModel.getRow()][resolvedModel.getCol() + resolver.getDist()] = resolvedModel
-//                                        .getTile()
-//                                        .setX(getTileX(resolvedModel.getRow()))
-//                                        .setY(getTileY(resolvedModel.getCol() + resolver.getDist()));
-//                            }
-//                            update();
-//                            continue;
-//                        }
+
+                        } /*else if (existTile.getValue() != resolvedModel.getTile().getValue()) {
+                            if (resolver.isHorizontal()) {
+                                tileBoard[resolvedModel.getRow() + resolver.getDist()][resolvedModel.getCol()] = resolvedModel
+                                        .getTile()
+                                        .setX(getTileX(resolvedModel.getRow() + resolver.getDist()))
+                                        .setY(getTileY(resolvedModel.getCol()));
+                            }  else if (resolver.isVertical()) {
+                                tileBoard[resolvedModel.getRow()][resolvedModel.getCol() + resolver.getDist()] = resolvedModel
+                                        .getTile()
+                                        .setX(getTileX(resolvedModel.getRow()))
+                                        .setY(getTileY(resolvedModel.getCol() + resolver.getDist()));
+                            }
+                            update();
+                            continue;
+                        }*/
                     }
                     tileBoard[resolvedModel.getRow()][resolvedModel.getCol()] = resolvedModel.getTile();
                     update();
@@ -109,21 +111,10 @@ public class GamePanel extends JPanel implements KeyListener {
         }
         this.createRandom();
 
-        /*for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
-                MyTile currentTile = tileBoard[row][col];
-                if (currentTile == null) {
-                    System.out.println("null");
-                    continue;
-                }
-                System.out.println("TILE");
-            }
-            System.out.println("\n");
-        }*/
-
     }
 
     public void drawBoard() {
+        //draw boar
         Graphics2D board = (Graphics2D) boardImg.getGraphics();
         board.setColor(new Color(0xB2CAC1));
         board.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
@@ -153,17 +144,17 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
     public void keyPressed(KeyEvent e) {
         this.repositionTile(e.getKeyCode());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
 
     }
 }

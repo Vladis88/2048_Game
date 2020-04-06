@@ -34,9 +34,9 @@ public class KeyEventResolver implements KeyEventResolvable {
                 horizontal = true;
                 dist = 1;
                 model.setCondition(this.col == 0);
-                this.tile.setX(GamePanel.getTileX(0));//надо передавать не 0(для того, чтобы плитки не залазили друг на друга)
+                this.tile.setX(GamePanel.getTileX(0));
                 model.setTile(this.tile);
-                model.setCol(0);//надо передавать не 0(для того, чтобы плитки не залазили друг на друга)
+                model.setCol(0);
                 break;
             case KeyEvent.VK_RIGHT:
                 horizontal = true;

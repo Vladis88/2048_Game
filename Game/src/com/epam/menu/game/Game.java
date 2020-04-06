@@ -19,31 +19,60 @@ public class Game {
     private JButton buttonBackOne;
     private JButton buttonAgain;
     private JFrame window;
-    public GamePanel game;
-   // private ScoreBoard scoreBoard;
+    public GamePanel gamePanel;
+    private ScoreBoard scoreBoard;
 
-    public Game() {
+    public JFrame BuildGameFrame() {
         ImageIcon icon = new ImageIcon("res/2048_ico.png");
         window = new JFrame();
-        game = new GamePanel();
+        gamePanel = new GamePanel();
         window.setIconImage(icon.getImage());
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setPreferredSize(new Dimension(Menu.WIDTH, Menu.HEIGHT));
-        window.add(game);
+        window.add(gamePanel);
         window.pack();
         window.setResizable(false);
         window.setLocationRelativeTo(null);
-        window.setVisible(true);
-        //this.scoreBoard = new ScoreBoard(0, 0);
+        //window.setVisible(true);
+        this.scoreBoard = new ScoreBoard(0, 0);
         this.buttonBackMenu = new JButton();
         this.buttonBackOne = new JButton();
         this.buttonAgain = new JButton();
         drawButton();
+
+        //button back to menu
+        buttonBackMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Back to menu");
+                window.dispose();
+                JFrame backMenu = new Menu().BuildMenu();
+                backMenu.setVisible(true);
+            }
+        });
+
+        //button again
+        buttonAgain.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Again");
+            }
+        });
+
+        //button back one
+        buttonBackOne.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("BackOne");
+            }
+        });
+
         update();
+        return window;
     }
 
     public void update() {
-        game.update();
+        gamePanel.update();
     }
 
 
@@ -53,11 +82,11 @@ public class Game {
         label.setBounds(10, 40, 220, 75);
         window.add(label);
 
-        //panel with a current score and a panel with a record
-       /* scoreBoard.setLocation(270, 40);
+        // draws a panel with a current score and a panel with a record
+        scoreBoard.setLocation(270, 40);
         scoreBoard.setPreferredSize(new Dimension(ScoreBoard.WIDTH + ScoreBoard.WIDTH_NEXT, ScoreBoard.HEIGHT));
         window.add(scoreBoard);
-        window.setVisible(true);*/
+        window.setVisible(true);
 
         //Button "back to menu"
         buttonBackMenu.setBounds(10, 195, 72, 72);
@@ -76,37 +105,15 @@ public class Game {
         buttonBackOne.setIcon(iconBack);
         window.setLayout(null);
         window.add(buttonBackOne);
+
+        //Button "game again"
         buttonAgain.setBounds(460, 200, 64, 64);
         buttonAgain.setBackground(new Color(0xEFEFEF));
         buttonAgain.setBorderPainted(false);
         buttonBackMenu.setIcon(iconMenu);
-
-        //Button "game again"
         ImageIcon iconAgain = new ImageIcon("res/again.png");
         buttonAgain.setIcon(iconAgain);
         window.setLayout(null);
         window.add(buttonAgain);
-
-        //button back to menu
-        buttonBackMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Back to menu");
-                window.dispose();
-                new Menu();
-            }
-        });
-        buttonAgain.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Again");
-            }
-        });
-        buttonBackOne.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("BackOne");
-            }
-        });
     }
 }

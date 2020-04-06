@@ -19,7 +19,7 @@ public class Menu extends JPanel {
     private JButton buttonPlay;
     private JButton buttonExit;
 
-    public Menu() {
+    public JFrame BuildMenu() {
         this.window = new JFrame();
         ImageIcon icon = new ImageIcon("res/backMenu2.png");
         this.window.setIconImage(icon.getImage());
@@ -31,18 +31,13 @@ public class Menu extends JPanel {
         this.window.setResizable(false);
         this.window.setLocationRelativeTo(null);
         drawMenu();
-        this.window.setVisible(true);
-
-        buttonCall();
-    }
-
-    public void buttonCall() {
         //button play
         buttonPlay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.dispose();
-                Game game = new Game();
+                JFrame game = new Game().BuildGameFrame();
+                game.setVisible(true);
             }
         });
 
@@ -54,8 +49,8 @@ public class Menu extends JPanel {
                 System.exit(0);
             }
         });
+        return window;
     }
-
     public void drawMenu() {
         ImageIcon mainImage = new ImageIcon("res/2048_ico_Main2.png");
         JLabel label = new JLabel(mainImage);
