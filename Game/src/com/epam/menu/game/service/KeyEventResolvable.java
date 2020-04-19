@@ -1,7 +1,5 @@
 package com.epam.menu.game.service;
 
-import com.epam.menu.game.service.Models.KeyEventResolvedModel;
-
 public interface KeyEventResolvable {
 
     /**

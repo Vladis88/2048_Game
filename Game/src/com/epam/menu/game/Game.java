@@ -23,9 +23,10 @@ public class Game {
     private ScoreBoard scoreBoard;
 
     public JFrame BuildGameFrame() {
+        scoreBoard = new ScoreBoard(0);
         ImageIcon icon = new ImageIcon("res/2048_ico.png");
         window = new JFrame();
-        gamePanel = new GamePanel();
+        gamePanel = new GamePanel(scoreBoard);
         window.setIconImage(icon.getImage());
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setPreferredSize(new Dimension(Menu.WIDTH, Menu.HEIGHT));
@@ -34,7 +35,6 @@ public class Game {
         window.setResizable(false);
         window.setLocationRelativeTo(null);
         //window.setVisible(true);
-        this.scoreBoard = new ScoreBoard(0, 0);
         this.buttonBackMenu = new JButton();
         this.buttonBackOne = new JButton();
         this.buttonAgain = new JButton();
@@ -84,7 +84,7 @@ public class Game {
 
         // draws a panel with a current score and a panel with a record
         scoreBoard.setLocation(270, 40);
-        scoreBoard.setPreferredSize(new Dimension(ScoreBoard.WIDTH + ScoreBoard.WIDTH_NEXT, ScoreBoard.HEIGHT));
+        scoreBoard.setPreferredSize(new Dimension(ScoreBoard.WIDTH, ScoreBoard.HEIGHT));
         window.add(scoreBoard);
         window.setVisible(true);
 

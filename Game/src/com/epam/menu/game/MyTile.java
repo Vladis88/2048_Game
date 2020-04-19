@@ -41,38 +41,38 @@ public class MyTile extends JPanel{
     public void drawTail() {
         Graphics2D g = (Graphics2D) tileImg.getGraphics();
         if (value == 2) {
-            background = new Color(0xffffff);
+            background = new Color(0xF4F5F3);
             text = new Color(0x373737);
         } else if (value == 4) {
-            background = new Color(0xF3FFF4);
+            background = new Color(0xDDF5D8);
             text = new Color(0x373737);
         } else if (value == 8) {
-            background = new Color(0x26B748);
+            background = new Color(0x1EC062);
             text = new Color(0xffffff);
         } else if (value == 16) {
-            background = new Color(0x9AD228);
+            background = new Color(0xC2E85D);
             text = new Color(0xffffff);
         } else if (value == 32) {
-            background = new Color(0xffffff);
-            text = new Color(0x373737);
+            background = new Color(0xEEB600);
+            text = new Color(0xffffff);
         } else if (value == 64) {
-            background = new Color(0xffffff);
-            text = new Color(0x373737);
+            background = new Color(0xEF612F);
+            text = new Color(0xffffff);
         } else if (value == 128) {
-            background = new Color(0xffffff);
-            text = new Color(0x373737);
+            background = new Color(0xE00325);
+            text = new Color(0xffffff);
         } else if (value == 256) {
-            background = new Color(0xffffff);
-            text = new Color(0x373737);
+            background = new Color(0xFF50FC);
+            text = new Color(0xffffff);
         } else if (value == 512) {
-            background = new Color(0xffffff);
-            text = new Color(0x373737);
+            background = new Color(0xD90CC9);
+            text = new Color(0xffffff);
         } else if (value == 1024) {
-            background = new Color(0xffffff);
-            text = new Color(0x00000);
+            background = new Color(0x7B10C2);
+            text = new Color(0xffffff);
         } else if (value == 2048) {
-            background = new Color(0xffffff);
-            text = new Color(0x373737);
+            background = new Color(0x2845A7);
+            text = new Color(0xffffff);
         } else {
             background = new Color(0xffffff);
             text = new Color(0x00000);

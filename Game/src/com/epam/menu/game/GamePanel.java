@@ -1,11 +1,11 @@
 package com.epam.menu.game;
 
-import com.epam.menu.game.service.Models.KeyEventResolvedModel;
+import com.epam.menu.game.service.GoToWhere;
+import com.epam.menu.game.service.KeyEventResolvedModel;
 import com.epam.menu.game.service.KeyEventResolver;
 
 import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -21,15 +21,17 @@ public class GamePanel extends JPanel implements KeyListener {
     public static final int COLS = 4;
     public static final int POSITION_X = 50;
     public static final int POSITION_Y = 325;
-    private static int SPACING = 10;
+    private static final int SPACING = 10;
     public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * MyTile.WIDTH;     //440
     public static int BOARD_HEIGHT = (ROWS + 1) * SPACING + ROWS * MyTile.HEIGHT;  //440
     private static final int startTail = 2;
     private MyTile[][] tileBoard;
-    private BufferedImage boardImg;
-
+    private final ScoreBoard scoreBoard;
+    private final BufferedImage boardImg;
+    private int countScore = 0;
     //Construction
-    public GamePanel() {
+    public GamePanel(ScoreBoard score) {
+        scoreBoard = score;
         setVisible(true);
         setFocusable(true);
         addKeyListener(this);
@@ -71,6 +73,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
     public void update() {
         this.repaint();
+        scoreBoard.repaint();
     }
 
     public void repositionTile(int event) {
@@ -78,43 +81,23 @@ public class GamePanel extends JPanel implements KeyListener {
             for (int col = 0; col < COLS; col++) {
                 MyTile currentTile = tileBoard[row][col];
                 if (currentTile != null) {
-                    KeyEventResolver resolver = new KeyEventResolver(currentTile, col, row, event);
+                    KeyEventResolver resolver = new KeyEventResolver(tileBoard, currentTile, col, row, event);
                     KeyEventResolvedModel resolvedModel = resolver.resolve();
-                    if (resolvedModel.isCondition()) break;
-                    tileBoard[row][col] = null;
-                    if (tileBoard[resolvedModel.getRow()][resolvedModel.getCol()] != null) {
-                        MyTile existTile = tileBoard[resolvedModel.getRow()][resolvedModel.getCol()];
-                        if (existTile.getValue() == resolvedModel.getTile().getValue()) {
-                            existTile.setValue(existTile.getValue() + resolvedModel.getTile().getValue());
-                            resolvedModel.setTile(existTile);
-
-                        } /*else if (existTile.getValue() != resolvedModel.getTile().getValue()) {
-                            if (resolver.isHorizontal()) {
-                                tileBoard[resolvedModel.getRow() + resolver.getDist()][resolvedModel.getCol()] = resolvedModel
-                                        .getTile()
-                                        .setX(getTileX(resolvedModel.getRow() + resolver.getDist()))
-                                        .setY(getTileY(resolvedModel.getCol()));
-                            }  else if (resolver.isVertical()) {
-                                tileBoard[resolvedModel.getRow()][resolvedModel.getCol() + resolver.getDist()] = resolvedModel
-                                        .getTile()
-                                        .setX(getTileX(resolvedModel.getRow()))
-                                        .setY(getTileY(resolvedModel.getCol() + resolver.getDist()));
-                            }
-                            update();
-                            continue;
-                        }*/
-                    }
+                    GoToWhere goToWhere = new GoToWhere(tileBoard, currentTile, col, row, resolvedModel);
+                    tileBoard = goToWhere.checkMoving();
                     tileBoard[resolvedModel.getRow()][resolvedModel.getCol()] = resolvedModel.getTile();
+                    countScore += resolvedModel.getScoreCount();
+                    scoreBoard.setCurrentRes(countScore);
+                    System.out.println(countScore);
                     update();
                 }
             }
         }
         this.createRandom();
-
     }
 
     public void drawBoard() {
-        //draw boar
+        //draw board
         Graphics2D board = (Graphics2D) boardImg.getGraphics();
         board.setColor(new Color(0xB2CAC1));
         board.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
