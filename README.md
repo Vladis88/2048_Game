@@ -13,4 +13,4 @@
   * 2.4 Картинка 2048;
   * 2.5 Панель "SCORE" - текщий результат
 ### Первое видео работы программы:
-<https://www.youtube.com/watch?v=lQ2jSbD_ANU/>
+<https://www.youtube.com/watch?v=lQ2jSbD_ANU>
