@@ -32,14 +32,16 @@ public class ScoreBoard extends JPanel {
     @Override
     protected void paintComponent(Graphics board) {
         //currentScoreBoard
+        board.setColor(new Color(0xEFEFEF));
+        board.fillRoundRect(0,0,65,65,5,5);
         board.setColor(new Color(0x45CC5F));
-        board.fillRoundRect(380, 40, WIDTH, HEIGHT, ARC_WIDTH, ARC_HEIGHT);
+        board.fillRoundRect(380, 60, WIDTH, HEIGHT, ARC_WIDTH, ARC_HEIGHT);
         board.setFont(new Font("Arial", Font.BOLD, 22));
         board.setColor(Color.WHITE);
-        board.drawString("SCORE", 410, 65);
+        board.drawString("SCORE", 410, 85);
         board.setColor(Color.BLACK);
         board.setFont(font);
-        board.drawString("" + currentRes, 390, 95);
+        board.drawString("" + currentRes, 410, 115);
     }
 
     public int getCurrentRes() {

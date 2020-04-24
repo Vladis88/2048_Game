@@ -1,13 +1,14 @@
 package com.epam.menu.game;
 
-import com.epam.menu.game.service.GoToWhere;
-import com.epam.menu.game.service.KeyEventResolvedModel;
-import com.epam.menu.game.service.KeyEventResolver;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -26,9 +27,11 @@ public class GamePanel extends JPanel implements KeyListener {
     public static int BOARD_HEIGHT = (ROWS + 1) * SPACING + ROWS * MyTile.HEIGHT;  //440
     private static final int startTail = 2;
     private MyTile[][] tileBoard;
-    private final ScoreBoard scoreBoard;
     private final BufferedImage boardImg;
+    private final ScoreBoard scoreBoard;
     private int countScore = 0;
+    private boolean gameOver = false;
+
     //Construction
     public GamePanel(ScoreBoard score) {
         scoreBoard = score;
@@ -76,28 +79,48 @@ public class GamePanel extends JPanel implements KeyListener {
         scoreBoard.repaint();
     }
 
-    public void repositionTile(int event) {
+    public void MoveTile(int event) {
+        GoToWhere goTo = new GoToWhere(tileBoard, event);
+        if (event == KeyEvent.VK_LEFT) {
+            goTo.goToLeft();
+        } else if (event == KeyEvent.VK_RIGHT) {
+            goTo.goToRight();
+        } else if (event == KeyEvent.VK_UP) {
+            goTo.goToUp();
+        } else if (event == KeyEvent.VK_DOWN) {
+            goTo.goToDown();
+        }
+        tileBoard = goTo.getTileBoard();
+        countScore += goTo.getCountScore();
+        scoreBoard.setCurrentRes(countScore);
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 MyTile currentTile = tileBoard[row][col];
-                if (currentTile != null) {
-                    KeyEventResolver resolver = new KeyEventResolver(tileBoard, currentTile, col, row, event);
-                    KeyEventResolvedModel resolvedModel = resolver.resolve();
-                    GoToWhere goToWhere = new GoToWhere(tileBoard, currentTile, col, row, resolvedModel);
-                    tileBoard = goToWhere.checkMoving();
-                    tileBoard[resolvedModel.getRow()][resolvedModel.getCol()] = resolvedModel.getTile();
-                    countScore += resolvedModel.getScoreCount();
-                    scoreBoard.setCurrentRes(countScore);
-                    System.out.println(countScore);
-                    update();
-                }
+                if(currentTile == null) continue;
+                resetPosition(currentTile,row,col);
+                update();
             }
         }
-        this.createRandom();
+        if(checkNewTile()){
+            createRandom();
+        } else {
+            gameOver = true;
+            System.out.println("Game over");
+        }
+    }
+
+    private void resetPosition(MyTile current, int row, int col) {
+        if(current == null) return;
+
+        int x = getTileX(col);
+        int y = getTileY(row);
+
+        current.setX(x);
+        current.setY(y);
     }
 
     public void drawBoard() {
-        //draw board
+        //draw boar
         Graphics2D board = (Graphics2D) boardImg.getGraphics();
         board.setColor(new Color(0xB2CAC1));
         board.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
@@ -126,9 +149,21 @@ public class GamePanel extends JPanel implements KeyListener {
         g.dispose();
     }
 
+    private boolean checkNewTile() {
+        int number = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (tileBoard[i][j] != null) {
+                    number++;
+                }
+            }
+        }
+        return number < 16;
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
-        this.repositionTile(e.getKeyCode());
+        this.MoveTile(e.getKeyCode());
     }
 
     @Override
@@ -139,5 +174,9 @@ public class GamePanel extends JPanel implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
 
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 }

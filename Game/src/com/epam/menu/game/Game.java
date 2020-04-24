@@ -16,7 +16,6 @@ public class Game {
      * This class creates a game window and starts it.
      */
     private JButton buttonBackMenu;
-    private JButton buttonBackOne;
     private JButton buttonAgain;
     private JFrame window;
     public GamePanel gamePanel;
@@ -24,6 +23,8 @@ public class Game {
 
     public JFrame BuildGameFrame() {
         scoreBoard = new ScoreBoard(0);
+        buttonBackMenu = new JButton();
+        buttonAgain = new JButton();
         ImageIcon icon = new ImageIcon("res/2048_ico.png");
         window = new JFrame();
         gamePanel = new GamePanel(scoreBoard);
@@ -34,10 +35,6 @@ public class Game {
         window.pack();
         window.setResizable(false);
         window.setLocationRelativeTo(null);
-        //window.setVisible(true);
-        this.buttonBackMenu = new JButton();
-        this.buttonBackOne = new JButton();
-        this.buttonAgain = new JButton();
         drawButton();
 
         //button back to menu
@@ -56,64 +53,40 @@ public class Game {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Again");
+                window.dispose();
+                JFrame game = new Game().BuildGameFrame();
+                game.setVisible(true);
             }
         });
 
-        //button back one
-        buttonBackOne.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("BackOne");
-            }
-        });
-
-        update();
         return window;
-    }
-
-    public void update() {
-        gamePanel.update();
     }
 
 
     public void drawButton() {
         ImageIcon image2048 = new ImageIcon("res/2048_image.png");
         JLabel label = new JLabel(image2048);
-        label.setBounds(10, 40, 220, 75);
+        label.setSize(new Dimension(220, 75));
+        label.setLocation(10, 60);
         window.add(label);
 
-        // draws a panel with a current score and a panel with a record
-        scoreBoard.setLocation(270, 40);
-        scoreBoard.setPreferredSize(new Dimension(ScoreBoard.WIDTH, ScoreBoard.HEIGHT));
-        window.add(scoreBoard);
-        window.setVisible(true);
-
-        //Button "back to menu"
-        buttonBackMenu.setBounds(10, 195, 72, 72);
-        buttonBackMenu.setBackground(new Color(0xEFEFEF));
-        buttonBackMenu.setBorderPainted(false);
-        ImageIcon iconMenu = new ImageIcon("res/backMenu3.png");
-        buttonBackMenu.setIcon(iconMenu);
-        window.setLayout(null);
-        window.add(buttonBackMenu);
-
-        //Button "back one step"
-        buttonBackOne.setBounds(385, 200, 64, 64);
-        buttonBackOne.setBackground(new Color(0xEFEFEF));
-        buttonBackOne.setBorderPainted(false);
-        ImageIcon iconBack = new ImageIcon("res/backOne.png");
-        buttonBackOne.setIcon(iconBack);
-        window.setLayout(null);
-        window.add(buttonBackOne);
-
         //Button "game again"
-        buttonAgain.setBounds(460, 200, 64, 64);
+        buttonAgain.setSize(new Dimension( 64, 64));
+        buttonAgain.setLocation(435,220);
         buttonAgain.setBackground(new Color(0xEFEFEF));
         buttonAgain.setBorderPainted(false);
-        buttonBackMenu.setIcon(iconMenu);
-        ImageIcon iconAgain = new ImageIcon("res/again.png");
-        buttonAgain.setIcon(iconAgain);
-        window.setLayout(null);
+        buttonAgain.setIcon(new ImageIcon("res/again.png"));
         window.add(buttonAgain);
+
+        //Button "back to menu"
+        buttonBackMenu.setSize(new Dimension( 72, 72));
+        buttonBackMenu.setLocation(35, 215);
+        buttonBackMenu.setBackground(new Color(0xEFEFEF));
+        buttonBackMenu.setBorderPainted(false);
+        buttonBackMenu.setIcon(new ImageIcon("res/backMenu3.png"));
+        window.add(buttonBackMenu);
+
+        // draws a panel with a current score and a panel with a record
+        window.add(scoreBoard);
     }
 }
