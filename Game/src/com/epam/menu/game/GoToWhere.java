@@ -1,6 +1,5 @@
 package com.epam.menu.game;
 
-
 import java.awt.event.KeyEvent;
 
 public class GoToWhere {

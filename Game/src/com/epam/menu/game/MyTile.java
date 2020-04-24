@@ -1,7 +1,6 @@
 package com.epam.menu.game;
 
 import com.epam.menu.Menu;
-
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -14,6 +13,7 @@ public class MyTile extends JPanel{
      * This class draws tiles.
      */
 
+
     //Size, speed and form of tile
     public static final int WIDTH = 100;
     public static final int HEIGHT = 100;
@@ -22,10 +22,7 @@ public class MyTile extends JPanel{
     public static final int ARC_HEIGHT = 15;
     //Color, digit and position
     private int value;
-    private BufferedImage tileImg;
-    private Color background;
-    private Color text;
-    private Font font;
+    private final BufferedImage tileImg;
     private int x;
     private int y;
 
@@ -40,6 +37,9 @@ public class MyTile extends JPanel{
 
     public void drawTail() {
         Graphics2D g = (Graphics2D) tileImg.getGraphics();
+        Color background;
+        Color text;
+        Font font;
         if (value == 2) {
             background = new Color(0xF4F5F3);
             text = new Color(0x373737);
@@ -77,6 +77,7 @@ public class MyTile extends JPanel{
             background = new Color(0xffffff);
             text = new Color(0x00000);
         }
+
         g.setColor(new Color(0, 0, 0, 0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
         g.setColor(background);
@@ -89,6 +90,7 @@ public class MyTile extends JPanel{
             font = Menu.main;
         }
         g.setFont(font);
+
         //высчитывание позиции ровно по центру плитки, исходя из размера цифры
         int drawX = WIDTH / 2 - DrawCntTile.getWidth("" + value, font, g) / 2;//позиция на плитки X
         int drawY = HEIGHT / 2 + DrawCntTile.getHeight("" + value, font, g) / 2;//позиция на плитки Y
@@ -114,20 +116,17 @@ public class MyTile extends JPanel{
         return y;
     }
 
-    public MyTile setX(int x) {
+    public void setX(int x) {
         this.x = x;
-        return this;
     }
 
-    public MyTile setY(int y) {
+    public void setY(int y) {
         this.y = y;
-        return this;
     }
 
-    public MyTile setValue(int value) {
+    public void setValue(int value) {
         this.value = value;
         drawTail();
-        return this;
     }
 
 }

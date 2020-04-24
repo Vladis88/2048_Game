@@ -1,6 +1,5 @@
 package com.epam.menu;
 import com.epam.menu.game.Game;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;

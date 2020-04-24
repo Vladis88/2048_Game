@@ -1,25 +1,20 @@
 package com.epam.menu.game;
 
 import com.epam.menu.Menu;
-
 import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.HeadlessException;
 
 public class ScoreBoard extends JPanel {
     /**
      * This class draws a panel with a current score and a panel with a record (maximum score)
      */
-
     public static final int WIDTH = 140;
     public static final int HEIGHT = 70;
     public static final int ARC_WIDTH = 10;
     public static final int ARC_HEIGHT = 10;
-    private Font font;
+    private final Font font;
     private int currentRes;
 
     public ScoreBoard(int currentRes) {
