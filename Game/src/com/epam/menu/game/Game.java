@@ -22,7 +22,7 @@ public class Game {
     private ScoreBoard scoreBoard;
 
     public JFrame BuildGameFrame() {
-        scoreBoard = new ScoreBoard(0);
+        scoreBoard = new ScoreBoard(0, 0);
         buttonBackMenu = new JButton();
         buttonAgain = new JButton();
         ImageIcon icon = new ImageIcon("res/2048_ico.png");

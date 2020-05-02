@@ -7,6 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements KeyListener {
@@ -24,19 +30,77 @@ public class GamePanel extends JPanel implements KeyListener {
     private MyTile[][] tileBoard;
     private final BufferedImage boardImg;
     private final ScoreBoard scoreBoard;
-    private int countScore = 0;
+    private int score = 0;
+    private int highScore = 0;
     private boolean gameOver = false;
+
+    //saving
+    private String saveDataPath;
+    private final String fileName = "SaveData.txt"; //or -> "SaveData"
+
 
     //Construction
     public GamePanel(ScoreBoard score) {
+        try {
+            saveDataPath = GamePanel.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         scoreBoard = score;
         setVisible(true);
         setFocusable(true);
         addKeyListener(this);
         boardImg = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
         tileBoard = new MyTile[ROWS][COLS];
+
+        loadHighScore();
         drawBoard();
         start();
+    }
+
+    private void createSaveData() {
+        try {
+            File file = new File(saveDataPath, fileName);
+
+            FileWriter output = new FileWriter(file);
+            BufferedWriter writer = new BufferedWriter(output);
+            writer.write("" + 0);
+
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setHighScore() {
+        FileWriter output = null;
+        try {
+            File file = new File(saveDataPath, fileName);
+            output = new FileWriter(file);
+            BufferedWriter writer = new BufferedWriter(output);
+            writer.write("" + highScore);
+            scoreBoard.setBestRes(highScore);//чтобы показывала на экране, когда дошло до max
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadHighScore() {
+        try {
+            File file = new File(saveDataPath, fileName);
+            if (!file.isFile()) {
+                createSaveData();
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            highScore = Integer.parseInt(reader.readLine());
+            scoreBoard.setBestRes(highScore);
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void start() {
@@ -61,17 +125,22 @@ public class GamePanel extends JPanel implements KeyListener {
         }
     }
 
-    public static int getTileX(int col) {
+    public int getTileX(int col) {
         return POSITION_X + SPACING + SPACING * col + MyTile.WIDTH * col;
     }
 
-    public static int getTileY(int row) {
+    public int getTileY(int row) {
         return POSITION_Y + SPACING + SPACING * row + MyTile.HEIGHT * row;
     }
 
     public void update() {
         this.repaint();
+        if(score >= highScore){
+            highScore = score;
+            setHighScore();
+        }
         scoreBoard.repaint();
+
     }
 
     public void MoveTile(int event) {
@@ -84,19 +153,21 @@ public class GamePanel extends JPanel implements KeyListener {
             goTo.goToUp();
         } else if (event == KeyEvent.VK_DOWN) {
             goTo.goToDown();
+        } else {
+            return;
         }
         tileBoard = goTo.getTileBoard();
-        countScore += goTo.getCountScore();
-        scoreBoard.setCurrentRes(countScore);
+        score += goTo.getCountScore();
+        scoreBoard.setCurrentRes(score);
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 MyTile currentTile = tileBoard[row][col];
-                if(currentTile == null) continue;
-                resetPosition(currentTile,row,col);
+                if (currentTile == null) continue;
+                resetPosition(currentTile, row, col);
                 update();
             }
         }
-        if(checkNewTile()){
+        if (checkNewTile()) {
             createRandom();
         } else {
             gameOver = true;
@@ -105,7 +176,7 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     private void resetPosition(MyTile current, int row, int col) {
-        if(current == null) return;
+        if (current == null) return;
 
         int x = getTileX(col);
         int y = getTileY(row);
@@ -171,7 +242,11 @@ public class GamePanel extends JPanel implements KeyListener {
 
     }
 
-    public boolean isGameOver() {
-        return gameOver;
+    public int getScore() {
+        return score;
+    }
+
+    public int getHighScore() {
+        return highScore;
     }
 }
