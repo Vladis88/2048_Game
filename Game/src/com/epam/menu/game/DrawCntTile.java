@@ -10,7 +10,6 @@ public class DrawCntTile {
      * This class is for calculating the position in the center of the tile.
      */
     private DrawCntTile() {}
-
     public static int getWidth(String str, Font f, Graphics2D g) {
         g.setFont(f);
         Rectangle2D bounds = g.getFontMetrics().getStringBounds(str, g);//получаем размер цифры (ширина), которая будет на плитке

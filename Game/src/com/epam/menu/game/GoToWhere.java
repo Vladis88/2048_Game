@@ -104,6 +104,10 @@ public class GoToWhere {
         }
     }
 
+    public boolean isCanMove() {
+        return canMove;
+    }
+
     public int getCountScore() {
         return countScore;
     }

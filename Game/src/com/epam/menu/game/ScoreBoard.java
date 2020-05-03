@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class ScoreBoard extends JPanel {
     /**
@@ -16,8 +17,12 @@ public class ScoreBoard extends JPanel {
     public static final int ARC_WIDTH = 10;
     public static final int ARC_HEIGHT = 10;
     private final Font font;
+    private int countFromWon = 0;
+    private boolean gameOver = false;
+    private boolean won = false;
     private int currentRes;
     private int bestRes;
+
 
     public ScoreBoard(int currentRes, int bestRes) {
         this.currentRes = currentRes;
@@ -39,7 +44,7 @@ public class ScoreBoard extends JPanel {
         board.drawString("SCORE", 310, 85);
         board.setColor(Color.BLACK);
         board.setFont(font);
-        board.drawString("" + currentRes, 310, 115);
+        board.drawString("" + currentRes, 312, 115);
         //bestScoreBoard
         board.setColor(new Color(0xEFEFEF));
         board.fillRoundRect(0, 0, 65, 65, 5, 5);
@@ -50,7 +55,24 @@ public class ScoreBoard extends JPanel {
         board.drawString("BEST", 440, 85);
         board.setColor(Color.BLACK);
         board.setFont(font);
-        board.drawString("" + bestRes, 425, 115);
+        board.drawString("" + bestRes, 432, 115);
+
+        if (gameOver) {
+            board.setColor(Color.red);
+            board.setFont(Menu.main.deriveFont(70f));
+            board.drawString("Game Over!", 75, 200);
+            board.setFont(Menu.main.deriveFont(20f));
+            board.drawString("Press one of these buttons", 143, 260);
+        }
+        if(won){
+            board.setColor(Color.red);
+            board.setFont(Menu.main.deriveFont(40f));
+            board.drawString("CONGRATULATIONS!", 65, 200);
+            if(countFromWon++ > 2){
+                board.setColor(new Color(0xEFEFEF));
+                board.fillRect(0, 160, 550, 50);
+            }
+        }
     }
 
     public void setBestRes(int bestRes) {
@@ -61,4 +83,19 @@ public class ScoreBoard extends JPanel {
         this.currentRes = currentRes;
     }
 
+    public int getCurrentRes() {
+        return currentRes;
+    }
+
+    public int getBestRes() {
+        return bestRes;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public void setWon(boolean won) {
+        this.won = won;
+    }
 }

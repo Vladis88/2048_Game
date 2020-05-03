@@ -20,9 +20,10 @@ public class Game {
     private JFrame window;
     public GamePanel gamePanel;
     private ScoreBoard scoreBoard;
+    private final ScoreManager scores = new ScoreManager(null);
 
     public JFrame BuildGameFrame() {
-        scoreBoard = new ScoreBoard(0, 0);
+        scoreBoard = new ScoreBoard(scores.getCurrentScore(), scores.getCurrentTopScore());
         buttonBackMenu = new JButton();
         buttonAgain = new JButton();
         ImageIcon icon = new ImageIcon("res/2048_ico.png");
@@ -45,6 +46,8 @@ public class Game {
                 window.dispose();
                 JFrame backMenu = new Menu().BuildMenu();
                 backMenu.setVisible(true);
+                scores.setNewGame(false);
+                scoreBoard.setBestRes(scores.getCurrentTopScore());
             }
         });
 
@@ -53,9 +56,12 @@ public class Game {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Again");
+                gamePanel.reset();
                 window.dispose();
                 JFrame game = new Game().BuildGameFrame();
                 game.setVisible(true);
+                scores.setNewGame(true);
+                scoreBoard.setBestRes(scores.getCurrentTopScore());
             }
         });
 
