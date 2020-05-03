@@ -15,3 +15,5 @@
   * 2.5 Панель "BEST" - лучший результат
 ### Первое видео работы программы:
 <https://www.youtube.com/watch?v=lQ2jSbD_ANU>
+### Второе видео работы программы(готовая игра):
+<https://www.youtube.com/watch?v=6vwG9BQgpgs>
