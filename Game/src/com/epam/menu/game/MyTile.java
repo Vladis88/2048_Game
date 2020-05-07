@@ -13,11 +13,9 @@ public class MyTile extends JPanel{
      * This class draws tiles.
      */
 
-
     //Size, speed and form of tile
     public static final int WIDTH = 100;
     public static final int HEIGHT = 100;
-    public static final int MOVE_SPEED = 20;
     public static final int ARC_WIDTH = 15;
     public static final int ARC_HEIGHT = 15;
     //Color, digit and position

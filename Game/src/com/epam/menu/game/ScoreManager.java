@@ -16,7 +16,7 @@ public class ScoreManager {
 
     //File
     private final String filePath;
-    private final String temp = "TMP.txt";
+    private final String temp = "TMP.json";
     private final GamePanel gBoard;
 
     //Boolean
@@ -24,7 +24,7 @@ public class ScoreManager {
 
     public ScoreManager(GamePanel gBoard) {
         this.gBoard = gBoard;
-        filePath = new File("").getAbsolutePath();
+        filePath = new File("").getAbsolutePath().concat("\\INFO");
     }
 
     public void reset() {

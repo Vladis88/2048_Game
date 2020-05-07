@@ -60,8 +60,6 @@ public class Game {
                 window.dispose();
                 JFrame game = new Game().BuildGameFrame();
                 game.setVisible(true);
-                scores.setNewGame(true);
-                scoreBoard.setBestRes(scores.getCurrentTopScore());
             }
         });
 

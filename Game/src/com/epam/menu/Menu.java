@@ -17,6 +17,7 @@ public class Menu extends JPanel {
     private JFrame window;
     private JButton buttonPlay;
     private JButton buttonExit;
+    private JButton buttonLastGame;
 
     public JFrame BuildMenu() {
         this.window = new JFrame();
@@ -24,6 +25,7 @@ public class Menu extends JPanel {
         this.window.setIconImage(icon.getImage());
         buttonPlay = new JButton();
         buttonExit = new JButton();
+        buttonLastGame = new JButton();
         this.window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.window.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.window.pack();
@@ -37,6 +39,13 @@ public class Menu extends JPanel {
                 window.dispose();
                 JFrame game = new Game().BuildGameFrame();
                 game.setVisible(true);
+            }
+        });
+        //button last game
+        buttonLastGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("RUN...");
             }
         });
 
@@ -53,12 +62,17 @@ public class Menu extends JPanel {
     public void drawMenu() {
         ImageIcon mainImage = new ImageIcon("res/2048_ico_Main2.png");
         JLabel label = new JLabel(mainImage);
-        label.setBounds(70, 50, 400, 383);
+        label.setBounds(90, 20, 350, 335);
         window.add(label);
 
-        buttonPlay.setBounds(50, 500, 450, 88);
+        buttonPlay.setBounds(50, 400, 450, 88);
         ImageIcon iconPlay = new ImageIcon("res/Play.png");
         buttonPlay.setIcon(iconPlay);
+        window.setLayout(null);
+
+        buttonLastGame.setBounds(50, 525, 450, 88);
+        ImageIcon iconLastGame = new ImageIcon("res/LastGame.png");
+        buttonLastGame.setIcon(iconLastGame);
         window.setLayout(null);
 
         buttonExit.setBounds(50, 650, 450, 88);
@@ -67,6 +81,7 @@ public class Menu extends JPanel {
         window.setLayout(null);
 
         window.add(buttonPlay);
+        window.add(buttonLastGame);
         window.add(buttonExit);
     }
 }

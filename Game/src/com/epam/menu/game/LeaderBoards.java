@@ -19,8 +19,8 @@ public class LeaderBoards {
     private final ArrayList<Integer> topTiles;
 
     private LeaderBoards() {
-        filePath = new File("").getAbsolutePath();
-        highScores = "Scores.txt";
+        filePath = new File("").getAbsolutePath().concat("\\INFO");
+        highScores = "Scores.json";
 
         topScores = new ArrayList<Integer>();
         topTiles = new ArrayList<Integer>();

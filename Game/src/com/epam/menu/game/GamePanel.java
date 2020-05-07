@@ -7,12 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements KeyListener {
@@ -128,6 +122,7 @@ public class GamePanel extends JPanel implements KeyListener {
         if (scores.getCurrentScore() >= scores.getCurrentTopScore()) {
             scores.setCurrentTopScore(scores.getCurrentScore());
             scoreBoard.setBestRes(scores.getCurrentTopScore());
+            lBoard.addTile(getHighestTileValue());
             lBoard.addScore(scores.getCurrentScore());
             lBoard.saveScores();
         }
