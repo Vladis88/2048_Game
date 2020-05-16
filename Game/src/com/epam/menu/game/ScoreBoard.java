@@ -36,7 +36,7 @@ public class ScoreBoard extends JPanel {
     protected void paintComponent(Graphics board) {
         //currentScoreBoard
         board.setColor(new Color(0xEFEFEF));
-        board.fillRoundRect(0, 0, 65, 65, 5, 5);
+        board.fillRect(0, 0, 60, 60);
         board.setColor(new Color(0x45CC5F));
         board.fillRoundRect(300, 60, WIDTH, HEIGHT, ARC_WIDTH, ARC_HEIGHT);
         board.setFont(new Font("Arial", Font.BOLD, 22));
@@ -81,14 +81,6 @@ public class ScoreBoard extends JPanel {
 
     public void setCurrentRes(int currentRes) {
         this.currentRes = currentRes;
-    }
-
-    public int getCurrentRes() {
-        return currentRes;
-    }
-
-    public int getBestRes() {
-        return bestRes;
     }
 
     public void setGameOver(boolean gameOver) {

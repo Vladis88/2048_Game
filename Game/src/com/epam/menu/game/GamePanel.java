@@ -1,5 +1,9 @@
 package com.epam.menu.game;
 
+import com.epam.menu.Menu;
+import com.epam.menu.player.RunPlayer;
+import com.epam.menu.player.SaveProcess;
+
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,19 +25,22 @@ public class GamePanel extends JPanel implements KeyListener {
     public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * MyTile.WIDTH;     //440
     public static int BOARD_HEIGHT = (ROWS + 1) * SPACING + ROWS * MyTile.HEIGHT;  //440
     private static final int startTail = 2;
-    private MyTile[][] tileBoard;
+    public MyTile[][] tileBoard;
     private final BufferedImage boardImg;
-    private final ScoreBoard scoreBoard;
+    public final ScoreBoard scoreBoard;
     private boolean won = false;
     private boolean dead = false;
-    private int nuberCheckWon = 0;
+    private int numberCheckWon = 0;
+    private final boolean flag;
 
-
-    private final ScoreManager scores;
-    private final LeaderBoards lBoard;
+    private ScoreManager scores;
+    private LeaderBoards lBoard;
+    private final SaveProcess saveProcessGame;
+    public RunPlayer player;
 
     //Construction
-    public GamePanel(ScoreBoard score) {
+    public GamePanel(ScoreBoard score, boolean save) {
+        this.flag = save;
         scoreBoard = score;
         setVisible(true);
         setFocusable(true);
@@ -42,29 +49,42 @@ public class GamePanel extends JPanel implements KeyListener {
         tileBoard = new MyTile[ROWS][COLS];
 
         drawBoard();
-        lBoard = LeaderBoards.getInstance();
-        lBoard.loadScores();
-        scores = new ScoreManager(this);
-        scores.loadGame();
-        scores.setCurrentTopScore(lBoard.getHighScore());
-        scoreBoard.setBestRes(scores.getCurrentTopScore());
-        scoreBoard.setCurrentRes(scores.getCurrentScore());
-        if (scores.newGame()) {
-            start();
-            scores.saveGame();
+        saveProcessGame = new SaveProcess(this);
+        if (!flag) {
+            startPlayer();
         } else {
-            for (int i = 0; i < scores.getBoard().length; i++) {
-                if (scores.getBoard()[i] == 0) continue;
-                spawn(i / ROWS, i % COLS, scores.getBoard()[i]);
+            lBoard = LeaderBoards.getInstance();
+            lBoard.loadScores();
+            scores = new ScoreManager(this);
+            scores.loadGame();
+            scores.setCurrentTopScore(lBoard.getHighScore());
+            scoreBoard.setBestRes(scores.getCurrentTopScore());
+            scoreBoard.setCurrentRes(scores.getCurrentScore());
+            if (scores.newGame()) {
+                start();
+                scores.saveGame();
+            } else {
+                for (int i = 0; i < scores.getBoard().length; i++) {
+                    if (scores.getBoard()[i] == 0) continue;
+                    spawn(i / ROWS, i % COLS, scores.getBoard()[i]);
+                }
+                dead = checkDead();
+                won = checkWon();
             }
-
-            dead = checkDead();
-            won = checkWon();
+            saveProcessGame.createFile();
+            saveProcessGame.setScore(scores.getCurrentScore());
+            saveProcessGame.setTopScore(scores.getCurrentTopScore());
+            saveProcessGame.saveAddProcess();
+            saveProcessGame.saveNumberOfProcess();
         }
-
     }
 
-    private void spawn(int row, int col, int value) {
+    private synchronized void startPlayer(){
+        player = new RunPlayer(this, saveProcessGame);
+        player.start();
+    }
+
+    public void spawn(int row, int col, int value) {
         tileBoard[row][col] = new MyTile(value, getTileX(col), getTileY(row));
     }
 
@@ -78,8 +98,10 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     private void start() {
-        for (int i = 0; i < startTail; i++) {
-            createRandom();
+        if (flag) {
+            for (int i = 0; i < startTail; i++) {
+                createRandom();
+            }
         }
     }
 
@@ -117,17 +139,24 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     public void update() {
-        scores.saveGame();
-        this.repaint();
-        if (scores.getCurrentScore() >= scores.getCurrentTopScore()) {
-            scores.setCurrentTopScore(scores.getCurrentScore());
-            scoreBoard.setBestRes(scores.getCurrentTopScore());
-            lBoard.addTile(getHighestTileValue());
-            lBoard.addScore(scores.getCurrentScore());
-            lBoard.saveScores();
-        }
-        scoreBoard.repaint();
+        if (flag) {
+            scores.saveGame();
+            this.repaint();
+            if (scores.getCurrentScore() >= scores.getCurrentTopScore()) {
+                scores.setCurrentTopScore(scores.getCurrentScore());
+                scoreBoard.setBestRes(scores.getCurrentTopScore());
+                lBoard.addTile(getHighestTileValue());
+                lBoard.addScore(scores.getCurrentScore());
+                lBoard.saveScores();
+            }
 
+            scoreBoard.repaint();
+
+            saveProcessGame.setScore(scores.getCurrentScore());
+            saveProcessGame.setTopScore(scores.getCurrentTopScore());
+            saveProcessGame.saveAddProcess();
+            saveProcessGame.saveNumberOfProcess();
+        }
     }
 
     public void MoveTile(int event) {
@@ -181,7 +210,7 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     public void drawBoard() {
-        //draw boar
+        //draw board
         Graphics2D board = (Graphics2D) boardImg.getGraphics();
         board.setColor(new Color(0xB2CAC1));
         board.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
@@ -198,6 +227,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
     @Override
     protected void paintComponent(Graphics g) {
+        //System.out.println(Thread.currentThread().getName());
         g.drawImage(boardImg, POSITION_X, POSITION_Y, null);
         //draw tiles
         for (int row = 0; row < ROWS; row++) {
@@ -214,8 +244,8 @@ public class GamePanel extends JPanel implements KeyListener {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 if (tileBoard[row][col] == null) continue;
-                if (tileBoard[row][col].getValue() == 2048 && nuberCheckWon < 1) {
-                    nuberCheckWon++;
+                if (tileBoard[row][col].getValue() == 2048 && numberCheckWon < 1) {
+                    numberCheckWon++;
                     setWon(true);
                     return true;
                 }
@@ -265,7 +295,9 @@ public class GamePanel extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        this.MoveTile(e.getKeyCode());
+        if (flag) {
+            this.MoveTile(e.getKeyCode());
+        }
     }
 
     @Override
@@ -284,21 +316,17 @@ public class GamePanel extends JPanel implements KeyListener {
 
     public int getHighestTileValue() {
         int value = 2;
-        for(int row = 0; row < ROWS; row++) {
-            for(int col = 0; col < COLS; col++) {
-                if(tileBoard[row][col] == null) continue;
-                if(tileBoard[row][col].getValue() > value) value = tileBoard[row][col].getValue();
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (tileBoard[row][col] == null) continue;
+                if (tileBoard[row][col].getValue() > value) value = tileBoard[row][col].getValue();
             }
         }
         return value;
     }
 
-    public boolean isDead(){
-        return dead;
-    }
-
-    public void setDead(boolean dead){
-        if(!this.dead && dead){
+    public void setDead(boolean dead) {
+        if (!this.dead && dead) {
             lBoard.addTile(getHighestTileValue());
             lBoard.addScore(scores.getCurrentScore());
             lBoard.saveScores();
@@ -306,16 +334,10 @@ public class GamePanel extends JPanel implements KeyListener {
         this.dead = dead;
     }
 
-    public boolean isWon() {
-        return won;
-    }
-
-    public void setWon(boolean won){
-        if(!this.won && won) {
+    public void setWon(boolean won) {
+        if (!this.won && won) {
             lBoard.saveScores();
         }
         this.won = won;
     }
-
-
 }

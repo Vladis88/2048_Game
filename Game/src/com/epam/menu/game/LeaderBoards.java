@@ -1,6 +1,5 @@
 package com.epam.menu.game;
 
-import java.awt.event.HierarchyBoundsAdapter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -119,18 +118,6 @@ public class LeaderBoards {
 
     public int getHighScore() {
         return topScores.get(0);
-    }
-
-    public int getHighTile(){
-        return topTiles.get(0);
-    }
-
-    public ArrayList<Integer> getTopScores() {
-        return topScores;
-    }
-
-    public ArrayList<Integer> getTopTiles() {
-        return topTiles;
     }
 
 }

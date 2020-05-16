@@ -37,7 +37,7 @@ public class Menu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.dispose();
-                JFrame game = new Game().BuildGameFrame();
+                JFrame game = new Game().BuildGameFrame(true);
                 game.setVisible(true);
             }
         });
@@ -45,6 +45,9 @@ public class Menu extends JPanel {
         buttonLastGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                window.dispose();
+                JFrame game = new Game().BuildGameFrame(false);
+                game.setVisible(true);
                 System.out.println("RUN...");
             }
         });

@@ -21,14 +21,16 @@ public class Game {
     public GamePanel gamePanel;
     private ScoreBoard scoreBoard;
     private final ScoreManager scores = new ScoreManager(null);
+    private boolean canSaveProcess;
 
-    public JFrame BuildGameFrame() {
+    public JFrame BuildGameFrame(boolean flag) {
+        this.canSaveProcess = flag;
         scoreBoard = new ScoreBoard(scores.getCurrentScore(), scores.getCurrentTopScore());
         buttonBackMenu = new JButton();
         buttonAgain = new JButton();
         ImageIcon icon = new ImageIcon("res/2048_ico.png");
         window = new JFrame();
-        gamePanel = new GamePanel(scoreBoard);
+        gamePanel = new GamePanel(scoreBoard, canSaveProcess);
         window.setIconImage(icon.getImage());
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setPreferredSize(new Dimension(Menu.WIDTH, Menu.HEIGHT));
@@ -43,6 +45,7 @@ public class Game {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Back to menu");
+                if(!canSaveProcess) gamePanel.player.running = false;
                 window.dispose();
                 JFrame backMenu = new Menu().BuildMenu();
                 backMenu.setVisible(true);
@@ -52,16 +55,17 @@ public class Game {
         });
 
         //button again
-        buttonAgain.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Again");
-                gamePanel.reset();
-                window.dispose();
-                JFrame game = new Game().BuildGameFrame();
-                game.setVisible(true);
-            }
-        });
+        if (canSaveProcess)
+            buttonAgain.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Again");
+                    gamePanel.reset();
+                    window.dispose();
+                    JFrame game = new Game().BuildGameFrame(canSaveProcess);
+                    game.setVisible(true);
+                }
+            });
 
         return window;
     }
@@ -75,15 +79,17 @@ public class Game {
         window.add(label);
 
         //Button "game again"
-        buttonAgain.setSize(new Dimension( 64, 64));
-        buttonAgain.setLocation(435,220);
-        buttonAgain.setBackground(new Color(0xEFEFEF));
-        buttonAgain.setBorderPainted(false);
-        buttonAgain.setIcon(new ImageIcon("res/again.png"));
-        window.add(buttonAgain);
+        if (canSaveProcess) {
+            buttonAgain.setSize(new Dimension(64, 64));
+            buttonAgain.setLocation(435, 220);
+            buttonAgain.setBackground(new Color(0xEFEFEF));
+            buttonAgain.setBorderPainted(false);
+            buttonAgain.setIcon(new ImageIcon("res/again.png"));
+            window.add(buttonAgain);
+        }
 
         //Button "back to menu"
-        buttonBackMenu.setSize(new Dimension( 72, 72));
+        buttonBackMenu.setSize(new Dimension(72, 72));
         buttonBackMenu.setLocation(35, 215);
         buttonBackMenu.setBackground(new Color(0xEFEFEF));
         buttonBackMenu.setBorderPainted(false);
