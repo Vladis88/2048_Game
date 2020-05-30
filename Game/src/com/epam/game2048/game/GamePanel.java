@@ -36,6 +36,7 @@ public class GamePanel extends JPanel implements KeyListener {
     private LeaderBoards lBoard;
     private final SaveProcess saveProcessGame;
     public RunPlayer player;
+    private static int numberSaveGame;
 
     //Construction
     public GamePanel(ScoreBoard score, boolean save) {
@@ -48,7 +49,7 @@ public class GamePanel extends JPanel implements KeyListener {
         tileBoard = new MyTile[ROWS][COLS];
 
         drawBoard();
-        saveProcessGame = new SaveProcess(this);
+        saveProcessGame = new SaveProcess(this, ++numberSaveGame);
         if (!flag) {
             startPlayer();
         } else {
@@ -79,7 +80,7 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     private synchronized void startPlayer(){
-        player = new RunPlayer(this, saveProcessGame);
+        player = new RunPlayer(this, saveProcessGame, numberSaveGame);
         player.start();
     }
 
@@ -150,7 +151,6 @@ public class GamePanel extends JPanel implements KeyListener {
             }
 
             scoreBoard.repaint();
-
             saveProcessGame.setScore(scores.getCurrentScore());
             saveProcessGame.setTopScore(scores.getCurrentTopScore());
             saveProcessGame.saveAddProcess();
@@ -159,6 +159,7 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     public void MoveTile(int event) {
+        saveProcessGame.setKeyMove(event);
         GoToWhere goTo = new GoToWhere(tileBoard, event);
         if (event == KeyEvent.VK_LEFT) {
             goTo.goToLeft();

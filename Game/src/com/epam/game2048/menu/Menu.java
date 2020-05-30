@@ -1,5 +1,7 @@
 package com.epam.game2048.menu;
 import com.epam.game2048.game.Game;
+import com.epam.game2048.player.RunPlayer;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;

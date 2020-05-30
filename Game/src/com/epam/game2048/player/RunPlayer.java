@@ -6,9 +6,11 @@ public class RunPlayer extends Thread {
 
     private final GamePanel gamePanel;
     private final SaveProcess saveProcessGame;
+    private int currentNumberSaveFile;
     public boolean running;
 
-    public RunPlayer(GamePanel gBoard, SaveProcess ProcessGame) {
+    public RunPlayer(GamePanel gBoard, SaveProcess ProcessGame, int current) {
+        currentNumberSaveFile = current;
         this.gamePanel = gBoard;
         saveProcessGame = ProcessGame;
         running = true;
@@ -16,6 +18,7 @@ public class RunPlayer extends Thread {
 
     @Override
     public void run() {
+        saveProcessGame.setCurrentFiles(--currentNumberSaveFile);
         saveProcessGame.loadNumberOfProcess();
         int countOfProcess = saveProcessGame.getNumberOfProcess();
         int tmpStr = 1;

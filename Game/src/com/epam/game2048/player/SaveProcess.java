@@ -3,6 +3,14 @@ package com.epam.game2048.player;
 import com.epam.game2048.game.GamePanel;
 import com.epam.game2048.game.MyTile;
 
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,20 +23,26 @@ public class SaveProcess {
     //Current scores
     private int score;
     private int topScore;
+    private int keyMove;
     private final int[] board = new int[GamePanel.ROWS * GamePanel.COLS];
 
     //File
     private final String filePath;
-    private final String temp = "Process.json";
-    private final String tempNumberProcess = "NumberOfProcess.json";
+    //    private final String temp = numberSaveGame + "Process.json";
+    private String temp;
+    //    private final String tempNumberProcess = numberSaveGame + "NumberOfProcess.json";
+    private String tempNumberProcess;
 
     private final GamePanel gBoard;
     private int numberOfProcess = 0;
 
-    public SaveProcess(GamePanel gBoard) {
+    public SaveProcess(GamePanel gBoard, int tmp) {
         this.gBoard = gBoard;
+        temp = tmp + "Process.json";
+        tempNumberProcess = tmp + "NumberOfProcess.json";
         filePath = new File("").getAbsolutePath().concat("\\INFO\\Player");
     }
+
 
     public void createFile() {
         FileWriter output = null;
@@ -52,6 +66,8 @@ public class SaveProcess {
                 }
             }
             writer.newLine();
+            writer.write("" + 0);//keyMove
+            writer.newLine();
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,11 +77,10 @@ public class SaveProcess {
 
     public void saveAddProcess() {
         FileWriter output = null;
-
         try {
             File f = new File(filePath, temp);
 
-            if(!f.isFile()){
+            if (!f.isFile()) {
                 createFile();
             }
 
@@ -88,6 +103,8 @@ public class SaveProcess {
                     }
                 }
             }
+            writer.newLine();
+            writer.append(String.valueOf(keyMove));
             writer.newLine();
             writer.close();
         } catch (Exception e) {
@@ -113,7 +130,7 @@ public class SaveProcess {
         //System.out.println(Thread.currentThread().getName());
         try {
             File f = new File(filePath, tempNumberProcess);
-            if(!f.isFile())return;
+            if (!f.isFile()) return;
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
             numberOfProcess = Integer.parseInt(reader.readLine());
             reader.close();
@@ -128,27 +145,35 @@ public class SaveProcess {
             File f = new File(filePath, temp);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-            for(int n = 1; n <= numStr; n++){
-                if(n == numStr){
+            for (int n = 1; n <= numStr; n++) {
+                if (n == numStr) {
                     score = Integer.parseInt(reader.readLine());
                     topScore = Integer.parseInt(reader.readLine());
                     String[] board = reader.readLine().split("-");
                     for (int i = 0; i < board.length; i++) {
                         this.board[i] = Integer.parseInt(board[i]);
                     }
+                    keyMove = Integer.parseInt(reader.readLine());
                 } else {
+                    reader.readLine();
                     reader.readLine();
                     reader.readLine();
                     reader.readLine();
                 }
             }
-
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public int getKeyMove() {
+        return keyMove;
+    }
+
+    public void setKeyMove(int keyMove) {
+        this.keyMove = keyMove;
+    }
 
     public int getScore() {
         return score;
@@ -162,11 +187,15 @@ public class SaveProcess {
         return topScore;
     }
 
+    public void setCurrentFiles(int tmp) {
+        if (tmp <= 0) return;
+        temp = tmp + "Process.json";
+        tempNumberProcess = tmp + "NumberOfProcess.json";
+    }
 
     public void setTopScore(int topScore) {
         this.topScore = topScore;
     }
-
 
     public int getNumberOfProcess() {
         return numberOfProcess;
